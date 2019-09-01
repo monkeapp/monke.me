@@ -1,6 +1,7 @@
 export default function createStore() {
     return {
         savedNewTransfer: null,
+        savedAddress: null,
         usdPrice: 0.1,
         isSnackbarActive: false,
         preferredLocale: null,

@@ -23,8 +23,10 @@
         },
         asyncData({params, store}) {
             if (store.state.savedNewTransfer) {
+                const transfer = store.state.savedNewTransfer;
+                store.commit('SET_NEW_TRANSFER', null);
                 return {
-                    transfer: store.state.savedNewTransfer,
+                    transfer,
                 };
             } else {
                 return getTransfer(params.code)

@@ -27,6 +27,7 @@
     "entity-decode": "^2.0.2",
     "faker": "^4.1.0",
     "minterjs-util": "^0.12.0",
+    "minterjs-wallet": "^4.0.1",
     "nuxt": "^2.9.1",
     "pretty-num": "^0.3.0",
     "qrcode.vue": "^1.6.2",

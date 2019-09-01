@@ -83,7 +83,7 @@
                 return `/${this.$route.params.code}/receive`;
             },
             walletLink() {
-                return `/${this.$route.params.code}/wallet`;
+                return `/${this.$route.params.code}/new`;
             },
         },
         methods: {

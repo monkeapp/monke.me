@@ -4,6 +4,9 @@ export default {
     SET_NEW_TRANSFER: (state, transfer) => {
         state.savedNewTransfer = transfer;
     },
+    SET_SAVED_ADDRESS: (state, address) => {
+        state.savedAddress = address;
+    },
     /**
      * Show snackbar if it is inactive
      */

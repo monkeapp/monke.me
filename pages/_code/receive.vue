@@ -6,6 +6,7 @@
     import {getServerValidator, fillServerErrors, getErrorText} from "~/assets/server-error";
     import {getReceiveInfo, claimReceive} from '~/api';
     import {pretty} from '~/assets/utils';
+    import {EXPLORER_HOST} from '~/assets/variables';
     import ButtonCopy from '~/components/common/ButtonCopy.vue';
     import Loader from '~/components/common/Loader';
     import Modal from '~/components/common/Modal';
@@ -87,6 +88,15 @@
             hasPassword() {
                 return false;
             },
+            explorerAddress() {
+                return EXPLORER_HOST + '/address/' + this.form.address;
+            }
+        },
+        beforeMount() {
+            if (this.$store.state.savedAddress) {
+                this.form.address = this.$store.state.savedAddress;
+                this.$store.commit('SET_SAVED_ADDRESS', null);
+            }
         },
         methods: {
             submit() {
@@ -136,7 +146,7 @@
                 <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
             </h2>
 
-            <form class="transfer__claim" novalidate @submit.prevent="submit">
+            <form class="transfer__claim-form transfer__claim" novalidate @submit.prevent="submit">
                 <div class="form-row">
                     <label class="form-field" :class="{'is-error': $v.form.address.$error}">
                         <span class="form-field__label">Enter your wallet address to recieve money</span>
@@ -176,10 +186,14 @@
                 {{ successValue | pretty }} BIP
                 <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(successValue) | pretty }} USD</span>
             </div>
-            <p class="u-h u-h2">to {{ form.address }}</p>
+            <p class="transfer__success-address u-h u-h2">
+                <span>to</span>
+                <img src="/img/icon-monke.png" srcset="/img/icon-monke@2x.png 2x" alt="" role="presentation" width="24" height="24"/>
+                <a class="link--default u-fw-700" :href="explorerAddress" target="_blank">{{ form.address }}</a>
+            </p>
 
             <p class="transfer__success-more">
-                <nuxt-link class="link--default u-fw-700" to="/"> Wanna Monke money to someone?</nuxt-link>
+                <nuxt-link class="link--default u-fw-700" to="/">Wanna Monke money to someone?</nuxt-link>
             </p>
         </div>
 
@@ -190,7 +204,11 @@
                 <span class="transfer__confirm-value-bip">{{ transfer.value | pretty }} BIP</span>
                 <span class="transfer__confirm-value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
             </h2>
-            <p class="transfer__confirm-address">to {{ form.address }}</p>
+            <p class="transfer__confirm-address">
+                <span>to</span>
+                <img src="/img/icon-monke.png" srcset="/img/icon-monke@2x.png 2x" alt="" role="presentation" width="24" height="24"/>
+                <span>{{ form.address }}</span>
+            </p>
             <div class="transfer__receive-submit">
                 <div class="button-group">
                     <button class="button button--main" type="button" data-test-id="walletSendModalSubmitButton" :class="{'is-loading': isFormSending}" @click="claim">
