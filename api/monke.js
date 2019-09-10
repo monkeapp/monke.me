@@ -17,6 +17,15 @@ export function makeTransfer() {
 }
 
 /**
+ * @param {string} password
+ * @return {Promise<Transfer>}
+ */
+export function updateTransfer(password) {
+    return instance.post('transfers', {password})
+        .then((response) => response.data.data);
+}
+
+/**
 *
 * @return {Promise<Transfer>}
 */
@@ -34,13 +43,21 @@ export function getReceiveInfo(code) {
         .then((response) => response.data.data);
 }
 
-export function claimReceive(code, address) {
+export function claimReceive(code, address, password) {
     return instance.put(`transfers/receive/${code}`, {
             output_address: address,
+            password: password || undefined,
         })
         .then((response) => response.data.data);
 }
 
 /**
- * @typedef {{receiver_id_code: string, creator_id_code: string, input_deposit: {network_code: string, address: string}, value: string, status: string}} Transfer
+ * @typedef {{
+ * receiver_id_code: string,
+ * creator_id_code: string,
+ * input_deposit: {network_code: string, address: string},
+ * value: string,
+ * status: string,
+ * is_password_protected: boolean,
+ * }} Transfer
  * */

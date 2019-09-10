@@ -6,10 +6,12 @@
     import sameAs from 'vuelidate/lib/validators/sameAs';
     import QrcodeVue from 'qrcode.vue';
     import {getServerValidator, fillServerErrors, getErrorText} from "~/assets/server-error";
-    import {makeTransfer, getTransfer} from '~/api';
+    import {makeTransfer, getTransfer, updateTransfer} from '~/api';
     import {pretty} from '~/assets/utils';
     import ButtonCopy from '~/components/common/ButtonCopy.vue'
     import Lead from '~/components/Lead';
+
+    let transferInterval;
 
     export default {
         components: {
@@ -100,6 +102,19 @@
                 return window.location.protocol + '//' + this.receiveLinkText;
             }
         },
+        mounted() {
+            // update transfer amount
+            transferInterval = setInterval(() => {
+                // getTransfer(this.$route.params.code)
+                getTransfer(this.transfer.receiver_id_code)
+                    .then((transfer) => {
+                        this.transfer = transfer;
+                    });
+            }, 10 * 1000)
+        },
+        destroyed() {
+            clearImmediate(transferInterval);
+        },
         methods: {
             activatePassword() {
                 this.isPasswordActive = true;
@@ -108,30 +123,35 @@
                 this.isPasswordActive = false;
             },
             submit() {
-                this.step = 2;
-                // if (this.isFormSending) {
-                //     return;
-                // }
-                // if (this.$v.$invalid) {
-                //     this.$v.$touch();
-                //     return;
-                // }
-                // this.isFormSending = true;
-                //
-                // register(removeEmptyKeys(this.form))
-                //     .then((authData) => {
-                //         this.$store.commit('SET_AUTH_PROFILE', authData);
-                //         this.$router.push(this.preferredPath('index'));
-                //         // don't remove loader during redirect
-                //         // this.isFormSending = false;
-                //     })
-                //     .catch((error) => {
-                //         let hasValidationErrors = fillServerErrors(error, this.sve);
-                //         if (!hasValidationErrors) {
-                //             this.serverError = getErrorText(error);
-                //         }
-                //         this.isFormSending = false;
-                //     });
+                if (this.isFormSending) {
+                    return;
+                }
+
+                if (!this.isPasswordActive) {
+                    this.step = 2;
+                    return;
+                }
+
+                if (this.$v.$invalid) {
+                    this.$v.$touch();
+                    return;
+                }
+                this.isFormSending = true;
+
+                updateTransfer(this.form.password)
+                    .then((transfer) => {
+                        this.transfer = transfer;
+                        this.step = 2;
+                        // don't remove loader during redirect
+                        this.isFormSending = false;
+                    })
+                    .catch((error) => {
+                        let hasValidationErrors = fillServerErrors(error, this.sve);
+                        if (!hasValidationErrors) {
+                            this.serverError = getErrorText(error);
+                        }
+                        this.isFormSending = false;
+                    });
             },
         }
 
@@ -156,6 +176,7 @@
                 <div class="transfer__password">
                     <button
                         class="link link--main link--opacity u-semantic-button u-icon-wrap" type="button"
+                        :key="isPasswordActive"
                         @click="activatePassword"
                         v-if="!isPasswordActive"
                     >
@@ -166,7 +187,7 @@
                     <template v-else>
                         <div class="transfer__password-cell">
                             <label class="form-field" :class="{'is-error': $v.form.password.$error}">
-                                <input class="form-field__input" type="password" placeholder="Password"
+                                <input class="form-field__input" type="password" autocomplete="new-password" placeholder="Password"
                                        v-model="form.password"
                                        @blur="$v.form.password.$touch()"
                                        @input="sve.password.isActual = false"
@@ -187,7 +208,7 @@
                             <span class="form-field__error" v-if="$v.form.passwordConfirm.$dirty && !$v.form.passwordConfirm.required">Repeat password</span>
                             <span class="form-field__error" v-if="$v.form.passwordConfirm.$dirty && $v.form.passwordConfirm.required && !$v.form.passwordConfirm.sameAsPassword">Passwords don't match</span>
                         </div>
-                        <button class="transfer__password-close u-icon u-semantic-button link--opacity" aria-label="Remove password" @click="deactivatePassword">
+                        <button class="transfer__password-close u-icon u-semantic-button link--opacity" type="button" aria-label="Remove password" @click="deactivatePassword">
                             <img src="/img/icon-close.svg" alt="Copy">
                         </button>
                     </template>
@@ -213,8 +234,6 @@
                 <nuxt-link class="transfer__receive-link link--default" :to="receiveLink">{{ receiveLinkText }}</nuxt-link>
             </p>
 
-
-
             <div class="transfer__receive-submit">
                 <div class="button-group">
                     <ButtonCopy class="button button--main" aria-label="Copy" :copy-text="receiveLinkFull">
@@ -223,7 +242,6 @@
                     <nuxt-link class="link--default u-fw-700" to="/">One more?</nuxt-link>
                 </div>
             </div>
-
         </div>
     </div>
 </template>

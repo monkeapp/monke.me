@@ -86,7 +86,7 @@
         },
         computed: {
             hasPassword() {
-                return false;
+                return this.transfer.is_password_protected;
             },
             explorerAddress() {
                 return EXPLORER_HOST + '/address/' + this.form.address;
@@ -117,7 +117,7 @@
                 // save value for later usage on success page
                 this.successValue = this.transfer.value;
 
-                claimReceive(this.$route.params.code, this.form.address)
+                claimReceive(this.$route.params.code, this.form.address, this.form.password)
                     .then(() => {
                         this.isFormSending = false;
                         this.serverSuccess = true;
@@ -150,7 +150,7 @@
                 <div class="form-row">
                     <label class="form-field" :class="{'is-error': $v.form.address.$error}">
                         <span class="form-field__label">Enter your wallet address to recieve money</span>
-                        <input class="form-field__input" type="text" placeholder="Your Bip Wallet Address"
+                        <input class="form-field__input" type="text" autocomplete="new-password" placeholder="Your Bip Wallet Address"
                                v-model="form.address"
                                @blur="$v.form.address.$touch()"
                                @input="sve.address.isActual = false"
@@ -163,7 +163,7 @@
                 <div class="form-row" v-if="hasPassword">
                     <label class="form-field" :class="{'is-error': $v.form.password.$error}">
                         <span class="form-field__label">Sender set password for this transaction:</span>
-                        <input class="form-field__input" type="password" placeholder="Transaction Password"
+                        <input class="form-field__input" type="password" autocomplete="new-password" placeholder="Transaction Password"
                                v-model="form.password"
                                @blur="$v.form.password.$touch()"
                                @input="sve.password.isActual = false"
