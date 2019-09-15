@@ -1,19 +1,9 @@
-import parseISO from 'date-fns/esm/parseISO';
-import format from 'date-fns/esm/format';
 import decode from 'entity-decode';
 import prettyNum, {PRECISION_SETTING, ROUNDING_MODE} from 'pretty-num';
 import stripZeros from 'pretty-num/src/strip-zeros';
 import fromExponential from 'from-exponential';
 
 
-export function formatDate(timestamp) {
-    if (typeof timestamp === 'string') {
-        timestamp = parseISO(timestamp);
-    }
-    const time = format(timestamp, 'dd.MM.yy');
-
-    return time && time !== 'Invalid Date' ? time : false;
-}
 
 /**
  * @param {string|number} value

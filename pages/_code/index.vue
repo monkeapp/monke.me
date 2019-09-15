@@ -6,7 +6,7 @@
     import sameAs from 'vuelidate/lib/validators/sameAs';
     import QrcodeVue from 'qrcode.vue';
     import {getServerValidator, fillServerErrors, getErrorText} from "~/assets/server-error";
-    import {getReceiveInfo} from '~/api';
+    import {getTransfer} from '~/api';
     import {pretty} from '~/assets/utils';
     import ButtonCopy from '~/components/common/ButtonCopy.vue';
     import Lead from '~/components/Lead';
@@ -22,7 +22,7 @@
             pretty,
         },
         asyncData({params}) {
-            return getReceiveInfo(params.code)
+            return getTransfer(params.code)
                 .then((transfer) => {
                     return {
                         transfer,

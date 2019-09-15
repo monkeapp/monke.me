@@ -4,7 +4,7 @@
     import QrcodeVue from 'qrcode.vue';
     import {isValidAddress} from "minterjs-util/src/prefix";
     import {getServerValidator, fillServerErrors, getErrorText} from "~/assets/server-error";
-    import {getReceiveInfo, claimReceive} from '~/api';
+    import {getTransfer, claimReceive} from '~/api';
     import {pretty} from '~/assets/utils';
     import {EXPLORER_HOST} from '~/assets/variables';
     import ButtonCopy from '~/components/common/ButtonCopy.vue';
@@ -25,7 +25,7 @@
             pretty,
         },
         asyncData({params}) {
-            return getReceiveInfo(params.code)
+            return getTransfer(params.code)
                 .then((transfer) => {
                     return {
                         transfer,

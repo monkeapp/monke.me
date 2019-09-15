@@ -6,7 +6,7 @@
     import sameAs from 'vuelidate/lib/validators/sameAs';
     import QrcodeVue from 'qrcode.vue';
     import {getServerValidator, fillServerErrors, getErrorText} from "~/assets/server-error";
-    import {makeTransfer, getTransfer, updateTransfer} from '~/api';
+    import {getOwnTransfer, getTransfer, updateTransfer} from '~/api';
     import {pretty} from '~/assets/utils';
     import ButtonCopy from '~/components/common/ButtonCopy.vue'
     import Lead from '~/components/Lead';
@@ -24,11 +24,11 @@
             pretty,
         },
         asyncData({params, store}) {
-            if (store.state.savedNewTransfer) {
-                const transfer = store.state.savedNewTransfer;
-                store.commit('SET_NEW_TRANSFER', null);
+            const ownTransfer = store.state.ownTransferList.find((item) => item.receiver_id_code === params.code);
+            if (ownTransfer) {
                 return {
-                    transfer,
+                    transfer: ownTransfer,
+                    creatorIdCode: ownTransfer.creator_id_code,
                 };
             } else {
                 return getTransfer(params.code)
@@ -59,8 +59,8 @@
             return {
                 /** @type Transfer */
                 transfer: {},
+                creatorIdCode: '',
                 isPasswordActive: false,
-
                 isFormSending: false,
                 serverError: '',
                 form: {
@@ -105,8 +105,8 @@
         mounted() {
             // update transfer amount
             transferInterval = setInterval(() => {
-                // getTransfer(this.$route.params.code)
-                getTransfer(this.transfer.receiver_id_code)
+                const transferPromise = this.creatorIdCode ? getOwnTransfer(this.creatorIdCode) : getTransfer(this.$route.params.code);
+                transferPromise
                     .then((transfer) => {
                         this.transfer = transfer;
                     });
@@ -128,7 +128,7 @@
                 }
 
                 if (!this.isPasswordActive) {
-                    this.step = 2;
+                    this.finishTransfer();
                     return;
                 }
 
@@ -138,10 +138,10 @@
                 }
                 this.isFormSending = true;
 
-                updateTransfer(this.form.password)
+                updateTransfer(this.creatorIdCode, this.form.password)
                     .then((transfer) => {
                         this.transfer = transfer;
-                        this.step = 2;
+                        this.finishTransfer();
                         // don't remove loader during redirect
                         this.isFormSending = false;
                     })
@@ -153,7 +153,12 @@
                         this.isFormSending = false;
                     });
             },
-        }
+            // finish transfer creation
+            finishTransfer() {
+                this.$store.commit('REMOVE_OWN_TRANSFER', this.creatorIdCode);
+                this.step = 2;
+            }
+        },
 
 
     };

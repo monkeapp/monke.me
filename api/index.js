@@ -1,4 +1,3 @@
-import faker from 'faker';
-import {makeTransfer, updateTransfer, getTransfer, getReceiveInfo, claimReceive} from '~/api/monke';
+import {makeTransfer, updateTransfer, getOwnTransfer, getTransfer, claimReceive} from '~/api/monke';
 
-export {makeTransfer, updateTransfer, getTransfer, getReceiveInfo, claimReceive};
+export {makeTransfer, updateTransfer, getOwnTransfer, getTransfer, claimReceive};

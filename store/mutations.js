@@ -1,8 +1,11 @@
 import Vue from 'vue';
 
 export default {
-    SET_NEW_TRANSFER: (state, transfer) => {
-        state.savedNewTransfer = transfer;
+    SET_OWN_TRANSFER: (state, transfer) => {
+        state.ownTransferList.push(transfer);
+    },
+    REMOVE_OWN_TRANSFER: (state, creatorIdCode) => {
+        state.ownTransferList = state.ownTransferList.filter((item) => item.creator_id_code !== creatorIdCode);
     },
     SET_SAVED_ADDRESS: (state, address) => {
         state.savedAddress = address;

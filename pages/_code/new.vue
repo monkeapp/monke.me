@@ -4,7 +4,7 @@
     import withParams from 'vuelidate/lib/withParams';
     import {req} from 'vuelidate/lib/validators/common';
     import * as clipboard from 'clipbrd';
-    import {getReceiveInfo} from '~/api';
+    import {getTransfer} from '~/api';
     import {pretty} from '~/assets/utils';
     import ButtonCopy from '~/components/common/ButtonCopy.vue';
     import Lead from '~/components/Lead';
@@ -24,7 +24,7 @@
             pretty,
         },
         asyncData({params}) {
-            return getReceiveInfo(params.code)
+            return getTransfer(params.code)
                 .then((transfer) => {
                     return {
                         transfer,

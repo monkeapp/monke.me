@@ -20,8 +20,8 @@ export function makeTransfer() {
  * @param {string} password
  * @return {Promise<Transfer>}
  */
-export function updateTransfer(password) {
-    return instance.post('transfers', {password})
+export function updateTransfer(creatorIdCode, password) {
+    return instance.put(`transfers/${creatorIdCode}`, {password})
         .then((response) => response.data.data);
 }
 
@@ -29,7 +29,7 @@ export function updateTransfer(password) {
 *
 * @return {Promise<Transfer>}
 */
-export function getTransfer(code) {
+export function getOwnTransfer(code) {
     return instance.get(`transfers/${code}`)
         .then((response) => response.data.data);
 }
@@ -38,7 +38,7 @@ export function getTransfer(code) {
  *
  * @return {Promise<Transfer>}
  */
-export function getReceiveInfo(code) {
+export function getTransfer(code) {
     return instance.get(`transfers/receive/${code}`)
         .then((response) => response.data.data);
 }

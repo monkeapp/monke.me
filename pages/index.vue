@@ -5,8 +5,8 @@
         fetch({store, redirect}) {
             return makeTransfer()
                 .then((transfer) => {
-                    store.commit('SET_NEW_TRANSFER', transfer);
-                    return redirect(`/send/${transfer.creator_id_code}`);
+                    store.commit('SET_OWN_TRANSFER', transfer);
+                    return redirect(`/send/${transfer.receiver_id_code}`);
                 });
         },
         head() {

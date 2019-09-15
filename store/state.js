@@ -1,6 +1,7 @@
 export default function createStore() {
     return {
-        savedNewTransfer: null,
+        /** @type Array<Transfer> */
+        ownTransferList: [],
         savedAddress: null,
         usdPrice: 0.1,
         isSnackbarActive: false,
