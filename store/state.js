@@ -3,7 +3,10 @@ export default function createStore() {
         /** @type Array<Transfer> */
         ownTransferList: [],
         savedAddress: null,
-        usdPrice: 0.1,
+        /** @type PriceData */
+        priceData: {
+            price: 0,
+        },
         isSnackbarActive: false,
         preferredLocale: null,
     };

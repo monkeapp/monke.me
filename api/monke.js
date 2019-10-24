@@ -17,6 +17,7 @@ export function makeTransfer() {
 }
 
 /**
+ * @param {string} creatorIdCode
  * @param {string} password
  * @return {Promise<Transfer>}
  */

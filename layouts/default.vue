@@ -18,7 +18,7 @@
 </script>
 
 <template>
-    <div>
+    <div class="main-wrap">
         <nuxt class=""/>
 
         <Snackbar/>

@@ -1,8 +1,31 @@
+import Big from 'big.js';
 import decode from 'entity-decode';
 import prettyNum, {PRECISION_SETTING, ROUNDING_MODE} from 'pretty-num';
 import stripZeros from 'pretty-num/src/strip-zeros';
 import fromExponential from 'from-exponential';
 
+
+/**
+ * @param {number,string,Big} num
+ * @param {number} power
+ * @return {string}
+ */
+export function convertToPower(num, power) {
+    const pow = new Big(10).pow(power);
+
+    return new Big(num).times(pow).round().toFixed();
+}
+
+/**
+ * @param {number,string,Big} num
+ * @param {number} power
+ * @return {string}
+ */
+export function convertFromPower(num, power) {
+    const pow = new Big(10).pow(power);
+
+    return new Big(num).div(pow).toFixed();
+}
 
 
 /**

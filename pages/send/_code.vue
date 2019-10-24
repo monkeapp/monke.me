@@ -74,19 +74,24 @@
                 step: 1,
             };
         },
-        validations: {
-            form: {
-                password: {
-                    required,
-                    // minLength: minLength(PASSWORD_MIN_LENGTH),
-                    // maxLength: maxLength(PASSWORD_MAX_LENGTH),
-                    server: getServerValidator('password'),
+        validations() {
+            return {
+                form: {
+                    password: {
+                        required,
+                        // minLength: minLength(PASSWORD_MIN_LENGTH),
+                        // maxLength: maxLength(PASSWORD_MAX_LENGTH),
+                        server: getServerValidator('password'),
+                    },
+                    passwordConfirm: {
+                        required,
+                        sameAsPassword: sameAs('password'),
+                    },
                 },
-                passwordConfirm: {
-                    required,
-                    sameAsPassword: sameAs('password'),
-                },
-            },
+                transfer: {
+                    hasValue: () => this.hasValue,
+                }
+            }
         },
         computed: {
             hasValue() {
@@ -127,15 +132,16 @@
                     return;
                 }
 
+                if (this.$v.$invalid) {
+                    this.$v.$touch();
+                    return;
+                }
+
                 if (!this.isPasswordActive) {
                     this.finishTransfer();
                     return;
                 }
 
-                if (this.$v.$invalid) {
-                    this.$v.$touch();
-                    return;
-                }
                 this.isFormSending = true;
 
                 updateTransfer(this.creatorIdCode, this.form.password)
@@ -171,14 +177,14 @@
             <QrcodeVue class="transfer__qr" :value="transfer.input_deposit.address" :size="195" level="L"/>
             <div class="transfer--send__content">
                 <h2 class="transfer__title">Send {{ transfer.input_deposit.network_code }} to:</h2>
-                <div class="transfer__address u-h2 u-icon-wrap">
+                <div class="transfer__address form-row--medium u-h2 u-icon-wrap">
                     <span class="u-icon-text">{{ transfer.input_deposit.address }}</span>
                     <ButtonCopy class="u-icon u-icon--copy--right u-semantic-button link--opacity" aria-label="Copy" :copy-text="transfer.input_deposit.address">
                         <img src="/img/icon-copy.svg" alt="Copy">
                     </ButtonCopy>
                 </div>
 
-                <div class="transfer__password">
+                <div class="transfer__password form-row--medium">
                     <button
                         class="link link--main link--opacity u-semantic-button u-icon-wrap" type="button"
                         :key="isPasswordActive"
@@ -219,13 +225,15 @@
                     </template>
                 </div>
 
-                <div class="transfer__submit">
-                    <button class="transfer__submit-button button button--main">Done</button>
+                <div class="transfer__submit form-row--medium">
+                    <button class="transfer__submit-button button button--main" :class="{'is-disabled': $v.$invalid}">Done</button>
                     <div class="transfer__submit-value" v-if="hasValue">
                         <div class="transfer__submit-value-bip">{{ transfer.value | pretty }} BIP sent</div>
                         <div class="transfer__submit-value-usd">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</div>
                     </div>
                 </div>
+
+                <div class="form-row--medium form__error" v-if="$v.transfer.$error">Please fulfill transaction before continue</div>
             </div>
         </form>
 

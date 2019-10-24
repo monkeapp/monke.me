@@ -8,7 +8,7 @@ This is the repository containing the code for the [monke.me](https://monke.me) 
 - ensure latest stable Node.js and NPM are installed
 - clone the repo
 - copy .env.example `cp .env.example .env`
-- set correct .env variables
+- set correct .env variables if needed
 - install node_modules `npm ci`
 - build `npm run production`
 - now you have static assets in the `./dist/` folder, you have to distribute them with some web server like Nginx or run `npm run start`

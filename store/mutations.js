@@ -10,6 +10,9 @@ export default {
     SET_SAVED_ADDRESS: (state, address) => {
         state.savedAddress = address;
     },
+    SET_PRICE_DATA: (state, data) => {
+        state.priceData = data;
+    },
     /**
      * Show snackbar if it is inactive
      */
