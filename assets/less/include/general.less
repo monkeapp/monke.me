@@ -233,7 +233,7 @@ hr {border: none; border-top: 1px solid @c-border;}
     font-size: inherit; line-height: 24px; /*padding: 20px 16px 6px;*/ padding: 11px 16px; color: inherit; background: #fff; border: 1px solid @c-border; transition: 0.15s; display: block; width: 100%; pointer-events: auto; border-radius: 10px; opacity: 1; /* safari disabled fix */ -webkit-text-fill-color: currentcolor; /* safari disabled fix */
     &:hover {border-color: @c-main;}
     &:focus {border-color: @c-main;}
-    &[readonly] {border-color: @c-border;}
+    .is-disabled > &, &[disabled], &[readonly] {border-color: @c-border;}
     .is-error > & {border-color: @c-red; background: tint(@c-red, 95%);}
 }
 //.form-field__input--select {appearance: none; background: url(../img/icon-dropdown.svg) no-repeat 100% 50%; padding-right: 24px;}

@@ -18,12 +18,12 @@
     &::before {transform: rotate(45deg);}
     &::after {transform: rotate(-45deg);}
 }
-.modal__container {width: 100%; max-width: 600px; margin: auto; padding-bottom: 40px;}
+.modal__container {width: 100%; max-width: 600px; margin: auto; /*padding-bottom: 40px;*/}
 .modal__panel {background: #fff; padding: @container-padding-small; overflow: hidden; color: @c-black;}
 
 @media (min-width: @breakpoint-medium-up) {
     .modal {padding: 0 @container-padding;}
     .modal__close {right: @container-padding-large - 5px;}
-    .modal__container {padding-bottom: 60px;}
+    //.modal__container {padding-bottom: 60px;}
     .modal__panel {padding: @container-padding;}
 }

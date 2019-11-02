@@ -26,6 +26,7 @@
         asyncData({params, store}) {
             const ownTransfer = store.state.ownTransferList.find((item) => item.receiver_id_code === params.code);
             if (ownTransfer) {
+                // don't make api call here to not delay redirect from index after transfer created
                 return {
                     transfer: ownTransfer,
                     creatorIdCode: ownTransfer.creator_id_code,
@@ -75,23 +76,26 @@
             };
         },
         validations() {
-            return {
-                form: {
-                    password: {
-                        required,
-                        // minLength: minLength(PASSWORD_MIN_LENGTH),
-                        // maxLength: maxLength(PASSWORD_MAX_LENGTH),
-                        server: getServerValidator('password'),
-                    },
-                    passwordConfirm: {
-                        required,
-                        sameAsPassword: sameAs('password'),
-                    },
-                },
+            const validationRules = {
                 transfer: {
                     hasValue: () => this.hasValue,
                 }
+            };
+            if (this.isPasswordActive) {
+                validationRules.form = {
+                    password: {
+                        required,
+                            // minLength: minLength(PASSWORD_MIN_LENGTH),
+                            // maxLength: maxLength(PASSWORD_MAX_LENGTH),
+                            server: getServerValidator('password'),
+                    },
+                    passwordConfirm: {
+                        required,
+                            sameAsPassword: sameAs('password'),
+                    },
+                };
             }
+            return validationRules;
         },
         computed: {
             hasValue() {
@@ -108,14 +112,23 @@
             }
         },
         mounted() {
-            // update transfer amount
-            transferInterval = setInterval(() => {
+            const getTransferPromise = () => {
                 const transferPromise = this.creatorIdCode ? getOwnTransfer(this.creatorIdCode) : getTransfer(this.$route.params.code);
-                transferPromise
+                return transferPromise
                     .then((transfer) => {
                         this.transfer = transfer;
+                        if (this.creatorIdCode) {
+                            this.$store.commit('UPDATE_OWN_TRANSFER', {creatorIdCode: this.creatorIdCode, transfer});
+                        }
                     });
-            }, 10 * 1000)
+            };
+
+            // ensure to update own transfer deposit value on load
+            if (this.creatorIdCode) {
+                getTransferPromise();
+            }
+            // update transfer amount
+            transferInterval = setInterval(getTransferPromise, 10 * 1000)
         },
         destroyed() {
             clearImmediate(transferInterval);
@@ -173,6 +186,8 @@
 <template>
     <div>
         <Lead type="send"/>
+
+        <!-- STEP 1 -->
         <form class="transfer transfer--send u-container" novalidate @submit.prevent="submit" v-if="step === 1">
             <QrcodeVue class="transfer__qr" :value="transfer.input_deposit.address" :size="195" level="L"/>
             <div class="transfer--send__content">
@@ -237,6 +252,7 @@
             </div>
         </form>
 
+        <!-- STEP 2 -->
         <div class="transfer u-container" v-if="step === 2">
             <h2 class="transfer__value u-h1">
                 {{ transfer.value | pretty }} BIP

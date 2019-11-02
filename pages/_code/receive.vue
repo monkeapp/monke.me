@@ -148,10 +148,11 @@
 
             <form class="transfer__claim-form transfer__claim" novalidate @submit.prevent="submit">
                 <div class="form-row">
-                    <label class="form-field" :class="{'is-error': $v.form.address.$error}">
+                    <label class="form-field" :class="{'is-error': $v.form.address.$error, 'is-disabled': isFormSending}">
                         <span class="form-field__label">Enter your wallet address to recieve money</span>
                         <input class="form-field__input" type="text" autocomplete="new-password" placeholder="Your Bip Wallet Address"
                                v-model="form.address"
+                               :disabled="isFormSending"
                                @blur="$v.form.address.$touch()"
                                @input="sve.address.isActual = false"
                         >
@@ -161,10 +162,11 @@
                     <span class="form-field__error" v-if="$v.form.address.$dirty && !$v.form.address.server">{{ sve.address.message }}</span>
                 </div>
                 <div class="form-row" v-if="hasPassword">
-                    <label class="form-field" :class="{'is-error': $v.form.password.$error}">
+                    <label class="form-field" :class="{'is-error': $v.form.password.$error, 'is-disabled': isFormSending}">
                         <span class="form-field__label">Sender set password for this transaction:</span>
                         <input class="form-field__input" type="password" autocomplete="new-password" placeholder="Transaction Password"
                                v-model="form.password"
+                               :disabled="isFormSending"
                                @blur="$v.form.password.$touch()"
                                @input="sve.password.isActual = false"
                         >
@@ -173,7 +175,10 @@
                     <span class="form-field__error" v-if="$v.form.password.$dirty && !$v.form.password.server">{{ sve.password.message }}</span>
                 </div>
                 <div class="form-row">
-                    <button class="button button--main">Monke to my Wallet</button>
+                    <button class="button button--main" :class="{'is-loading': isFormSending}">
+                        <span class="button__content">Monke to my Wallet</span>
+                        <Loader class="button__loader" :isLoading="true"/>
+                    </button>
                 </div>
                 <div class="form-row form__error" v-if="serverError">{{ serverError }}</div>
             </form>
@@ -211,9 +216,8 @@
             </p>
             <div class="transfer__receive-submit">
                 <div class="button-group">
-                    <button class="button button--main" type="button" data-test-id="walletSendModalSubmitButton" :class="{'is-loading': isFormSending}" @click="claim">
-                        <span class="button__content">Confirm</span>
-                        <Loader class="button__loader" :isLoading="true"/>
+                    <button class="button button--main" type="button" data-test-id="walletSendModalSubmitButton" @click="claim">
+                        Confirm
                     </button>
                     <button class="button button--ghost" type="button" v-if="!isFormSending" @click="isConfirmModalVisible = false">
                         Cancel
