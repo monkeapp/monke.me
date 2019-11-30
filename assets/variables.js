@@ -1,5 +1,5 @@
-export const BASE_TITLE_END = ' — Minter Contests';
-export const BASE_TITLE = 'Minter Contests';
+export const BASE_TITLE_END = ' — Monke';
+export const BASE_TITLE = 'Monke';
 export const BASE_DESCRIPTION = '';
 export const MONKE_API_URL = process.env.APP_MONKE_API_URL;
 export const CONVERT_API_URL = process.env.APP_CONVER_API_URL;
