@@ -15,5 +15,6 @@
         <fail unless="env.app_env" message="app_env environment variable is not set"/>
         <fail unless="env.app_monke_api_url" message="app_monke_api_url environment variable is not set"/>
         <fail unless="env.app_explorer_host" message="app_explorer_host environment variable is not set"/>
+        <fail unless="env.app_convert_api_url" message="app_convert_api_url environment variable is not set"/>
     </target>
 </project>
