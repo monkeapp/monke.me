@@ -26,7 +26,6 @@
                 .then((transfer) => {
                     return {
                         transfer,
-                        // step: 2,
                     };
                 });
         },
@@ -60,8 +59,6 @@
                 sve: {
                     password: {invalid: false, isActual: false, message: ''},
                 },
-                // 1 - set password, 2 - copy url
-                step: 1,
             };
         },
         validations: {
@@ -79,11 +76,14 @@
             },
         },
         computed: {
+            isStatusDone() {
+                return this.transfer.status === 'done';
+            },
             receiveLink() {
                 return `/${this.$route.params.code}/receive`;
             },
             walletLink() {
-                return `/${this.$route.params.code}/new`;
+                return `/${this.$route.params.code}/seed`;
             },
         },
         methods: {
@@ -98,7 +98,7 @@
     <div>
         <Lead type="receive"/>
 
-        <div class="transfer u-container">
+        <div class="transfer u-container" v-if="!isStatusDone">
             <h2 class="u-h1">
                 {{ transfer.value | pretty }} BIP
                 <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
@@ -110,6 +110,18 @@
                     <nuxt-link class="link--default u-fw-700" :to="walletLink">If you have no BIP Wallet <br> create it here</nuxt-link>
                 </div>
             </div>
+        </div>
+
+        <div class="transfer u-container" v-else>
+            <h2 class="transfer__success-title u-h1">Monke Sent!</h2>
+            <div class="u-h u-h1">
+                {{ transfer.value | pretty }} BIP
+                <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
+            </div>
+
+            <p class="transfer__success-more">
+                <nuxt-link class="link--default u-fw-700" to="/">Wanna Monke money to someone?</nuxt-link>
+            </p>
         </div>
     </div>
 </template>

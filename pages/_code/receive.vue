@@ -24,9 +24,12 @@
         filters: {
             pretty,
         },
-        asyncData({params}) {
+        asyncData({params, redirect}) {
             return getTransfer(params.code)
                 .then((transfer) => {
+                    if (transfer.status === 'done') {
+                        return redirect('/' + params.code);
+                    }
                     return {
                         transfer,
                     };
@@ -51,7 +54,6 @@
             return {
                 /** @type Transfer */
                 transfer: {},
-                successValue: 0,
                 isFormSending: false,
                 serverError: '',
                 serverSuccess: false,
@@ -90,7 +92,7 @@
             },
             explorerAddress() {
                 return EXPLORER_HOST + '/address/' + this.form.address;
-            }
+            },
         },
         beforeMount() {
             if (this.$store.state.savedAddress) {
@@ -114,8 +116,6 @@
                 this.isFormSending = true;
                 this.serverError = '';
                 this.serverSuccess = false;
-                // save value for later usage on success page
-                this.successValue = this.transfer.value;
 
                 claimReceive(this.$route.params.code, this.form.address, this.form.password)
                     .then(() => {
@@ -188,8 +188,8 @@
         <div class="transfer u-container" v-else>
             <h2 class="transfer__success-title u-h1">Monke Sent!</h2>
             <div class="u-h u-h1">
-                {{ successValue | pretty }} BIP
-                <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(successValue) | pretty }} USD</span>
+                {{ transfer.value | pretty }} BIP
+                <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
             </div>
             <p class="transfer__success-address u-h u-h2">
                 <span>to</span>
