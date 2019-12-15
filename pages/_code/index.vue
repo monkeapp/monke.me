@@ -10,12 +10,14 @@
     import {pretty} from '~/assets/utils';
     import ButtonCopy from '~/components/common/ButtonCopy.vue';
     import Lead from '~/components/Lead';
+    import TransferValue from '~/components/TransferValue';
 
     export default {
         components: {
             QrcodeVue,
             ButtonCopy,
             Lead,
+            TransferValue,
         },
         mixins: [validationMixin],
         filters: {
@@ -99,9 +101,8 @@
         <Lead type="receive"/>
 
         <div class="transfer u-container" v-if="!isStatusDone">
-            <h2 class="u-h1">
-                {{ transfer.value | pretty }} BIP
-                <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
+            <h2>
+                <TransferValue :transfer="transfer"/>
             </h2>
 
             <div class="transfer__receive-submit">
@@ -113,11 +114,8 @@
         </div>
 
         <div class="transfer u-container" v-else>
-            <h2 class="transfer__success-title u-h1">Monke Sent!</h2>
-            <div class="u-h u-h1">
-                {{ transfer.value | pretty }} BIP
-                <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
-            </div>
+            <TransferValue :transfer="transfer"/>
+            <h2 class="u-h1">ALREADY RECEIVED!</h2>
 
             <p class="transfer__success-more">
                 <nuxt-link class="link--default u-fw-700" to="/">Wanna Monke money to someone?</nuxt-link>

@@ -11,6 +11,7 @@
     import Loader from '~/components/common/Loader';
     import Modal from '~/components/common/Modal';
     import Lead from '~/components/Lead';
+    import TransferValue from '~/components/TransferValue';
 
     export default {
         components: {
@@ -19,6 +20,7 @@
             Loader,
             Modal,
             Lead,
+            TransferValue,
         },
         mixins: [validationMixin],
         filters: {
@@ -141,9 +143,8 @@
         <Lead type="receive"/>
 
         <div class="transfer u-container" v-if="!serverSuccess">
-            <h2 class="u-h1">
-                {{ transfer.value | pretty }} BIP
-                <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
+            <h2>
+                <TransferValue :transfer="transfer"/>
             </h2>
 
             <form class="transfer__claim-form transfer__claim" novalidate @submit.prevent="submit">
@@ -187,10 +188,7 @@
         <!-- Success -->
         <div class="transfer u-container" v-else>
             <h2 class="transfer__success-title u-h1">Monke Sent!</h2>
-            <div class="u-h u-h1">
-                {{ transfer.value | pretty }} BIP
-                <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
-            </div>
+            <TransferValue :transfer="transfer"/>
             <p class="transfer__success-address u-h u-h2">
                 <span>to</span>
                 <img src="/img/icon-monke.png" srcset="/img/icon-monke@2x.png 2x" alt="" role="presentation" width="24" height="24"/>
@@ -206,8 +204,7 @@
         <Modal v-bind:isOpen.sync="isConfirmModalVisible" :hideCloseButton="true">
             <h2 class="u-h1">
                 Send
-                <span class="transfer__confirm-value-bip">{{ transfer.value | pretty }} BIP</span>
-                <span class="transfer__confirm-value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
+                <TransferValue class="transfer__confirm-value-bip" :transfer="transfer"/>
             </h2>
             <p class="transfer__confirm-address">
                 <span>to</span>

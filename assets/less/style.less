@@ -99,8 +99,10 @@
     &+& {margin-top: 10px;}
 }
 .transfer__submit {}
-.transfer__submit-value {font-weight: 700;}
-.transfer__submit-value-usd {font-size: 16px;}
+.transfer__submit--panel {padding: 16px; background: @c-main; color: #fff; border-radius: 10px;}
+.transfer__submit-label {margin-bottom: 5px;}
+.transfer__submit-value {font-weight: 700; margin-bottom: 10px; font-size: inherit; line-height: inherit;}
+.transfer__submit-value-usd {font-size: 16px; line-height: inherit;}
 @media (min-width: @breakpoint-medium-up) {
     .transfer__qr {width: 195px; height: 195px; margin-top: (-47px - 25px); margin-bottom: 0; margin-left: 0; margin-right: 25px; flex-shrink: 0;}
     .transfer--send {display: flex;}
@@ -110,8 +112,8 @@
         &+& {margin-left: 10px; margin-top: 0;}
     }
     .transfer__password-close {margin-left: 14px; margin-top: 12px; flex-shrink: 0;}
-    .transfer__submit {display: flex; align-items: center;}
-    .transfer__submit-value {margin-left: 16px;}
+    //.transfer__submit {display: flex; align-items: center;}
+    //.transfer__submit-value {margin-left: 16px;}
 }
 @media (min-width: @breakpoint-large-up) {
     .transfer--send__content {min-width: auto;}
@@ -119,7 +121,7 @@
 
 // SEND step 2
 .transfer__value {margin-bottom: 15px;}
-.transfer__value-usd {}
+.transfer__value-usd {.u-h2();}
 .transfer__receive-link {display: inline-block; margin-top: 5px; font-size: 24px; max-width: 100%; overflow-wrap: break-word;}
 .transfer__receive-submit {margin-top: 25px;}
 

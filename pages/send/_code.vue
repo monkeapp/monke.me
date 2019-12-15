@@ -10,6 +10,7 @@
     import {pretty} from '~/assets/utils';
     import ButtonCopy from '~/components/common/ButtonCopy.vue'
     import Lead from '~/components/Lead';
+    import TransferValue from '~/components/TransferValue';
 
     let transferInterval;
 
@@ -18,6 +19,7 @@
             QrcodeVue,
             ButtonCopy,
             Lead,
+            TransferValue,
         },
         mixins: [validationMixin],
         filters: {
@@ -240,12 +242,10 @@
                     </template>
                 </div>
 
-                <div class="transfer__submit form-row--medium">
-                    <button class="transfer__submit-button button button--main" :class="{'is-disabled': $v.$invalid}">Done</button>
-                    <div class="transfer__submit-value" v-if="hasValue">
-                        <div class="transfer__submit-value-bip">{{ transfer.value | pretty }} BIP sent</div>
-                        <div class="transfer__submit-value-usd">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</div>
-                    </div>
+                <div class="transfer__submit form-row--medium" :class="{'transfer__submit--panel': hasValue}">
+                    <div class="transfer__submit-label" v-if="hasValue">Received:</div>
+                    <TransferValue class="transfer__submit-value" :transfer="transfer" v-if="hasValue"/>
+                    <button class="transfer__submit-button button button--yellow" :class="{'is-disabled': $v.$invalid}">Make transfer</button>
                 </div>
 
                 <div class="form-row--medium form__error" v-if="$v.transfer.$error">Please fulfill transaction before continue</div>
@@ -254,9 +254,8 @@
 
         <!-- STEP 2 -->
         <div class="transfer u-container" v-if="step === 2">
-            <h2 class="transfer__value u-h1">
-                {{ transfer.value | pretty }} BIP
-                <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
+            <h2>
+                <TransferValue :transfer="transfer"/>
             </h2>
             <p>
                 All assets available at: <br>

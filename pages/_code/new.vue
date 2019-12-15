@@ -8,6 +8,7 @@
     import {pretty} from '~/assets/utils';
     import ButtonCopy from '~/components/common/ButtonCopy.vue';
     import Lead from '~/components/Lead';
+    import TransferValue from '~/components/TransferValue';
 
     // checkbox validator
     const checked = withParams({ type: 'checked' }, (value) => {
@@ -18,6 +19,7 @@
         components: {
             ButtonCopy,
             Lead,
+            TransferValue,
         },
         mixins: [validationMixin],
         filters: {
@@ -117,9 +119,8 @@
 
         <div class="transfer u-container">
             <div class="transfer__claim">
-                <h2 class="u-h1">
-                    {{ transfer.value | pretty }} BIP
-                    <span class="transfer__value-usd u-h2">≈{{ $store.getters.getUsdPrice(transfer.value) | pretty }} USD</span>
+                <h2>
+                    <TransferValue :transfer="transfer"/>
                 </h2>
                 <p class="transfer__new-address u-h u-h2">{{ address }}</p>
                 <p>We’ve created BIP wallet for you. Before you get the money you need to save the seed phrase of your wallet.</p>
