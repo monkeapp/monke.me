@@ -101,7 +101,7 @@
         },
         computed: {
             hasValue() {
-                return Number(this.transfer.value);
+                return this.transfer.values && this.transfer.values.length;
             },
             receiveLink() {
                 return `/${this.transfer.receiver_id_code}`;
