@@ -1,7 +1,13 @@
 <script>
+    import {makeTransfer} from '~/api';
+
     export default {
-        fetch({redirect}) {
-            return redirect(`/send`);
+        fetch({store, redirect}) {
+            return makeTransfer()
+                .then((transfer) => {
+                    store.commit('SET_OWN_TRANSFER', transfer);
+                    return redirect(`/send/${transfer.receiver_id_code}`);
+                });
         },
         head() {
             // const title = getTitle(this.$store.state.sectionName, this.$i18n.locale);
@@ -18,6 +24,6 @@
                 ],
             };
         },
+
     };
 </script>
-

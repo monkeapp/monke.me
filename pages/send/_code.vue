@@ -267,7 +267,7 @@
                     <ButtonCopy class="button button--main" aria-label="Copy" :copy-text="receiveLinkFull">
                         Copy URL
                     </ButtonCopy>
-                    <nuxt-link class="link--default u-fw-700" to="/">One more?</nuxt-link>
+                    <nuxt-link class="link--default u-fw-700" to="/send">One more?</nuxt-link>
                 </div>
             </div>
         </div>

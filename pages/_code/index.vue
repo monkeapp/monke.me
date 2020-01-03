@@ -118,7 +118,7 @@
             <h2 class="u-h1">ALREADY RECEIVED!</h2>
 
             <p class="transfer__success-more">
-                <nuxt-link class="link--default u-fw-700" to="/">Wanna Monke money to someone?</nuxt-link>
+                <nuxt-link class="link--default u-fw-700" to="/send">Wanna Monke money to someone?</nuxt-link>
             </p>
         </div>
     </div>
