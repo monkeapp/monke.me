@@ -44,7 +44,7 @@ export default {
         { src: '~/plugins/persistedState.js', ssr: false },
         { src: '~/plugins/click-blur.js', ssr: false },
         { src: '~/plugins/price.js', ssr: false },
-        // { src: '~/plugins/seo-gtm.js', ssr: false },
+        { src: '~/plugins/seo-ym.js', ssr: false },
     ],
     env: envConfig.error ? {} : envConfig.parsed,
     modules: [

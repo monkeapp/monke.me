@@ -193,7 +193,7 @@
         <form class="transfer transfer--send u-container" novalidate @submit.prevent="submit" v-if="step === 1">
             <QrcodeVue class="transfer__qr" :value="transfer.input_deposit.address" :size="195" level="L"/>
             <div class="transfer--send__content">
-                <h2 class="transfer__title">Send {{ transfer.input_deposit.network_code }} to:</h2>
+                <h2 class="transfer__title">Send coins to:</h2>
                 <div class="transfer__address form-row--medium u-h2 u-icon-wrap">
                     <span class="u-icon-text">{{ transfer.input_deposit.address }}</span>
                     <ButtonCopy class="u-icon u-icon--copy--right u-semantic-button link--opacity" aria-label="Copy" :copy-text="transfer.input_deposit.address">
