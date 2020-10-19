@@ -23,6 +23,7 @@
     "clipbrd": "^1.0.2",
     "core-js": "^3.6.5",
     "entity-decode": "^2.0.2",
+    "imagemin-jpegtran": "^7.0.0",
     "minterjs-util": "^0.18.2",
     "minterjs-wallet": "^6.0.0",
     "nuxt": "^2.14.7",
