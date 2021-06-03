@@ -19,9 +19,6 @@ export default {
     SET_SAVED_ADDRESS: (state, address) => {
         state.savedAddress = address;
     },
-    SET_PRICE_DATA: (state, data) => {
-        state.priceData = data;
-    },
     /**
      * Show snackbar if it is inactive
      */
@@ -33,8 +30,5 @@ export default {
      */
     SET_SNACKBAR_INACTIVE: (state) => {
         state.isSnackbarActive = false;
-    },
-    SET_PREFERRED_LOCALE: (state, locale) => {
-        state.preferredLocale = locale;
     },
 };

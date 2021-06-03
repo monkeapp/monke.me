@@ -31,11 +31,12 @@ export default {
     /*
     ** Customize the progress bar color
     */
-    loading: { color: '#d35c12' },
+    loading: { color: '#5124c5' },
     router: {
         linkActiveClass: '',
         linkExactActiveClass: 'is-active',
         middleware: [
+            'status-data',
             // 'profile',
             // 'auth',
         ],
@@ -43,7 +44,6 @@ export default {
     plugins: [
         { src: '~/plugins/persistedState.js', ssr: false },
         { src: '~/plugins/click-blur.js', ssr: false },
-        { src: '~/plugins/price.js', ssr: false },
         { src: '~/plugins/seo-ym.js', ssr: false },
     ],
     env: envConfig.error ? {} : envConfig.parsed,
